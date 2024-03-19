@@ -1,0 +1,16 @@
+{
+  "name": "EKC",
+  "version": "1.0.0",
+  "description": "ekc client for kour",
+  "main": "app/main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron .",
+    "dist": "electron-builder"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^29.1.4"
+  }
+}
