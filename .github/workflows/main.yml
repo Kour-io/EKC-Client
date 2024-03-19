@@ -17,7 +17,7 @@ jobs:
           node-version: '14'
 
       - name: Install Dependencies
-        run: npm install
+        run: npm ci --production && npm install electron-builder
 
       - name: Get Version and Name from package.json
         id: get_version_name
