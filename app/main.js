@@ -1,47 +1,32 @@
-const { app, BrowserWindow } = require('electron');
-
-
-let client = new (require('discord-rpc-revamp').Client)();
-
-
-client.connect({ clientId: '1218201961296564297' }).catch(console.error);
-
-
+const { app, BrowserWindow, globalShortcut, clipboard } = require('electron');
+const platformType = require('os').platform();
+const path = require('node:path');
+const colors = require('colors');
+const gwnd = require('./js/utils/gameWindow.js');
 
 const url = 'https://kour.io';
+const chromiumFlags = [
+  ['disable-frame-rate-limit'],
+  ['disable-gpu-vsync'],
+  ['use-angle', 'default'],
+  ['enable-webgl2-compute-context'],
+  ['disable-accelerated-2d-canvas', 'true'],
+  ['in-process-gpu', null, platformType === 'win32'],
+  ['autoplay-policy', 'no-user-gesture-required'],
+  ['disable-features', 'NetworkService=1'],
+];
 
-const createWindow = () => {
-  const win = new BrowserWindow({
-    width: 1920,
-    height: 1080,
-    titleBarStyle: 'hidden',
-  });
-  win.removeMenu();
-  win.maximize();
-  win.once('focus', () => win.flashFrame(false));
-  win.flashFrame(true);
-  win.loadURL(url);
-
-
-  client.on('ready', _ => {
-    client.setActivity({
-      details: 'EKC-Client',
-      largeImageKey: 'kour',
-      startTimestamp: Date.now()
-    }).then(_ => {
-      console.log('rpc set');
-    });
-
-    client.subscribe('ACTIVITY_JOIN');
-    client.subscribe('ACTIVITY_JOIN_REQUEST');
-
-    client.on('ACTIVITY_JOIN', data => {});
-  });
-};
 
 app.whenReady().then(() => {
-  createWindow();
+  chromiumFlags.forEach(flag => {
+    const [flagName, flagValue, condition] = flag;
+    if (condition !== false) {
+      app.commandLine.appendSwitch(flagName, flagValue);
+    }
+  });
+  gwnd.launchGame(url);
 });
+
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit();
