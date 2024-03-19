@@ -12,5 +12,8 @@
   "license": "ISC",
   "devDependencies": {
     "electron": "^29.1.4"
+  },
+  "dependencies": {
+    "discord-rpc-revamp": "^2.0.3"
   }
 }
