@@ -17,7 +17,7 @@ jobs:
           node-version: '18.15.0'
 
       - name: Install Dependencies
-        run: npm i && npm i electron-builder
+        run: npm install
 
       - name: Get Version and Name from package.json
         id: get_version_name
