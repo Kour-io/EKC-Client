@@ -2,7 +2,7 @@
     "$schema": "https://raw.githubusercontent.com/electron-userland/electron-builder/master/packages/app-builder-lib/scheme.json",
     "appId": "com.Error.EKC",
     "productName": "EKC-Client",
-    "icon": "app/img/icon.png",
+    "icon": "./app/img/icon.png",
     "win": {
         "artifactName": "${name}-${os}-portable-${version}-${arch}.${ext}",
         "target": [
