@@ -1,4 +1,4 @@
-const { app, BrowserWindow, globalShortcut, clipboard } = require('electron');
+const { app, BrowserWindow, globalShortcut, ipcMain } = require('electron');
 const platformType = require('os').platform();
 const fs = require('fs');
 const path = require('path');
@@ -31,4 +31,8 @@ app.whenReady().then(() => {
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit();
+});
+
+ipcMain.on('cursor-capture-status', (event, isCursorCaptured) => {
+  console.log('Cursor captured:', isCursorCaptured);
 });

@@ -39,6 +39,8 @@ exports.gameWindow = class {
             webPreferences: {
                 preload: path.join(__dirname, '../preload/game.js'),
                 userAgent: userAgent,
+                contextIsolation: false,
+                nodeIntegration: true,
             },
         });
 
@@ -80,8 +82,22 @@ exports.gameWindow = class {
                     brWin.setFullScreen(!isFullScreen);
                 }
             });
+            globalShortcut.register('Escape', () => {
+                const focusedWindow = BrowserWindow.getFocusedWindow();
+                if (focusedWindow) {
+                    focusedWindow.webContents.executeJavaScript(`
+                        if (document.pointerLockElement) {
+                            document.exitPointerLock();
+                        }
+                    `);
+                }
+            });
+            globalShortcut.register('F2', () => {
+                win.webContents.send('preload-message', 'Hello there from gameWindow.js');
+            });
         });
 
         const rpcInstance = new rpc();
+
     }
 };

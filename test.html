@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cursor Position</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #openCloseButton {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    z-index: 999;
+  }
+
+  #popup {
+    display: none;
+    position: fixed;
+    bottom: 80px;
+    left: 20px;
+    width: 250px;
+    padding: 20px;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 999;
+  }
+
+  #popup.show {
+    display: block;
+  }
+
+  .input-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .input-group label {
+    width: 50px;
+    margin-right: 10px;
+    text-align: right;
+  }
+
+  #saveButton {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    border-radius: 5px;
+    cursor: pointer;
+    border: none;
+    margin-top: 10px;
+  }
+
+  #saveButton:hover {
+    background-color: #45a049;
+  }
+</style>
+</head>
+<body>
+
+<button id="openCloseButton">Open UI</button>
+
+<div id="popup">
+  <div class="input-group">
+    <label for="cursorInputX">X:</label>
+    <input type="number" id="cursorInputX" min="0" max="100" value="50">
+  </div>
+  <div class="input-group">
+    <label for="cursorInputY">Y:</label>
+    <input type="number" id="cursorInputY" min="0" max="100" value="50">
+  </div>
+  <label for="urlInput">Enter URL:</label>
+  <input type="text" id="urlInput">
+  <button id="saveButton">Save</button>
+</div>
+</body>
+</html>
+<script>
+  const openCloseButton = document.getElementById('openCloseButton');
+  const popup = document.getElementById('popup');
+  const cursorInputX = document.getElementById('cursorInputX');
+  const cursorInputY = document.getElementById('cursorInputY');
+  const urlInput = document.getElementById('urlInput');
+  const saveButton = document.getElementById('saveButton');
+
+  openCloseButton.addEventListener('click', () => {
+    if (popup.classList.contains('show')) {
+      popup.classList.remove('show');
+      openCloseButton.textContent = 'Open UI';
+    } else {
+      popup.classList.add('show');
+      openCloseButton.textContent = 'Close UI';
+    }
+  });
+
+  saveButton.addEventListener('click', () => {
+    console.log('X Position:', cursorInputX.value);
+    console.log('Y Position:', cursorInputY.value);
+    console.log('URL Input:', urlInput.value);
+  });
+</script>
+
+</body>
+</html>
