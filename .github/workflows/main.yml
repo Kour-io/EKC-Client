@@ -1,53 +1,43 @@
 name: Build
 
 on:
-  workflow_dispatch:
+    workflow_dispatch:
 
 jobs:
-  build:
-    runs-on: windows-latest
+    build:
+        runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
+        permissions:
+            contents: write
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '18.15.0'
+        steps:
+            - name: Checkout Repository
+              uses: actions/checkout@v2
 
-      - name: Install Dependencies
-        run: npm install
+            - name: Setup Node.js
+              uses: actions/setup-node@v2
+              with:
+                  node-version: '18.15.0'
 
-      - name: Get Version and Name from package.json
-        id: get_version_name
-        run: |
-          echo "::set-output name=version::$(node -p "require('./package.json').version")"
-          echo "::set-output name=name::$(node -p "require('./package.json').name")"
-          
-      - name: Build Electron App
-        run: npm run dist
+            - name: Install Dependencies
+              run: npm install
 
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GH_TOKEN: ${{ secrets.TOKEN }}
-        with:
-          tag_name: v${{ steps.get_version_name.outputs.version }}
-          release_name: Release ${{ steps.get_version_name.outputs.version }}
-          draft: false
-          prerelease: false
+            - name: Get version and name from package.json
+              id: get_version_name
+              run: |
+                  echo "::set-output name=version::$(node -p "require('./package.json').version")"
+                  echo "::set-output name=name::$(node -p "require('./package.json').name")"
 
-      - name: Upload Release Asset
-        id: upload-release-asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GH_TOKEN: ${{ secrets.TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./dist
-          asset_name: ${{ steps.get_version_name.outputs.name }}-v${{ steps.get_version_name.outputs.version }}.zip
-          asset_content_type: application/zip
+            - name: Create Release
+              id: create_release
+              uses: actions/create-release@v1
+              with:
+                  tag_name: v${{ steps.get_version_name.outputs.version }}
+                  release_name: Release ${{ steps.get_version_name.outputs.version }}
+                  draft: false
+                  prerelease: false
+
+            - name: Build Electron App
+              run: npm run dist
+              env:
+                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
