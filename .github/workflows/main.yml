@@ -25,9 +25,6 @@ jobs:
           echo "::set-output name=version::$(node -p "require('./package.json').version")"
           echo "::set-output name=name::$(node -p "require('./package.json').name")"
           
-      - name: Set up Token
-        run: echo "::set-env name=TOKEN::${{ secrets.TOKEN }}"
-
       - name: Build Electron App
         run: npm run dist
 
