@@ -13,16 +13,14 @@ ipcRenderer.send('cursor-capture-status', isCursorCaptured);
 
 document.addEventListener('DOMContentLoaded', () => {
     const img = new Image();
-    img.id = 'crosshairImage';
-    img.style.cssText = `
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 70px;
-        height: 70px;
-    `;
-    document.body.appendChild(img);
+        img.src = 'https://media.discordapp.net/attachments/1003112094473916488/1049006495074889748/White_TenZ_crosshair_.png?ex=660995ee&is=65f720ee&hm=362ebef06035acbfafb81041c939bdd153d61bcf9fd3205a4768c507c77bde4c&=&format=webp&quality=lossless&width=138&height=138';
+        img.style.position = 'absolute';
+        img.style.top = '50%';
+        img.style.left = '50%';
+        img.style.transform = 'translate(-50%, -50%)';
+        img.style.width = '70px';
+        img.style.height = '70px';
+        document.body.appendChild(img);
 
     const loadCrosshairPrefs = () => {
         const sizeX = localStorage.getItem('crosshairSizeX') || '70';
