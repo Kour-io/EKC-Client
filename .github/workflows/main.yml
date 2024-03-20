@@ -34,7 +34,7 @@ jobs:
               with:
                   tag_name: v${{ steps.get_version_name.outputs.version }}
                   release_name: Release ${{ steps.get_version_name.outputs.version }}
-                  draft: false
+                  draft: true
                   prerelease: false
 
             - name: Build Electron App
