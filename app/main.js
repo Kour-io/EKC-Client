@@ -1,6 +1,7 @@
 const { app, BrowserWindow, globalShortcut, clipboard } = require('electron');
 const platformType = require('os').platform();
-const path = require('node:path');
+const fs = require('fs');
+const path = require('path');
 const colors = require('colors');
 const gwnd = require('./js/utils/gameWindow.js');
 
@@ -24,7 +25,7 @@ app.whenReady().then(() => {
       app.commandLine.appendSwitch(flagName, flagValue);
     }
   });
-  gwnd.launchGame(url);
+  gwnd.launchGame(url); 
 });
 
 

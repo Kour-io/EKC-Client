@@ -1,7 +1,8 @@
 const { app, BrowserWindow, globalShortcut, clipboard } = require('electron');
 const client = new (require('discord-rpc-revamp').Client)();
 const platformType = require('os').platform();
-const path = require('node:path');
+const fs = require('fs');
+const path = require('path');
 const rpc = require('./rpc.js');
 let wombo;
 try {
