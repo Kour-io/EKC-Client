@@ -92,8 +92,8 @@ exports.gameWindow = class {
                     `);
                 }
             });
-            globalShortcut.register('F2', () => {
-                win.webContents.send('preload-message', 'Hello there from gameWindow.js');
+            globalShortcut.register('F5', () => {
+                win.loadURL((!url) ? 'https://kour.io' : url);
             });
         });
 
