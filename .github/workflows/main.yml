@@ -36,6 +36,7 @@ jobs:
                   release_name: Release ${{ steps.get_version_name.outputs.version }}
                   draft: true
                   prerelease: false
+                  token: ${{ secrets.GITHUB_TOKEN }}
 
             - name: Build Electron App
               run: npm run dist
