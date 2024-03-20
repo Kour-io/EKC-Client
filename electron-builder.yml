@@ -24,11 +24,6 @@ nsis:
   perMachine: false
   allowToChangeInstallationDirectory: true
 
-publish:
-  provider: github
-  repo: EKC-Client
-  owner: itsNMD404
-
 npmRebuild: false
 
 files:

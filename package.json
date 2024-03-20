@@ -17,8 +17,13 @@
     }
   },
   "devDependencies": {
+<<<<<<< Updated upstream
     "electron": "^29.1.0",
     "electron-builder": "^24"
+=======
+    "electron": "^^10.4.7",
+    "electron-builder": "^23.0.3"
+>>>>>>> Stashed changes
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
