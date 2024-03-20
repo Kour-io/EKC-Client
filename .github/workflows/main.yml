@@ -17,7 +17,7 @@ jobs:
           node-version: '18.15.0'
 
       - name: Install Dependencies
-        run: npm ci --production && npm i -g electron-forge
+        run: npm ci --production && npm i -g electron-builder
 
       - name: Get Version and Name from package.json
         id: get_version_name
@@ -26,7 +26,7 @@ jobs:
           echo "::set-output name=name::$(node -p "require('./package.json').name")"
 
       - name: Build Electron App
-        run: npx electron-forge make
+        run: npm run dist
 
       - name: Create Release
         id: create_release
@@ -46,6 +46,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./out
+          asset_path: ./dist
           asset_name: ${{ steps.get_version_name.outputs.name }}-v${{ steps.get_version_name.outputs.version }}.zip
           asset_content_type: application/zip
