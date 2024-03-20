@@ -43,6 +43,6 @@
         "provider": "github",
         "owner": "itsNMD404",
         "repo": "EKC-Client",
-        "releaseType": "release"
+        "releaseType": "draft"
     }
 }
