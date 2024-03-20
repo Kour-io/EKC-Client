@@ -3,12 +3,6 @@
   "version": "1.0.0",
   "description": "ekc client for kour",
   "main": "app/main.js",
-  "build": {
-    "appId": "1",
-    "productName": "EKC-Client",
-    "directories": {
-      "output": "dist"
-    },
     "files": [
       "**/*"
     ],
