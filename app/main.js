@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const colors = require('colors');
 const gwnd = require('./js/utils/gameWindow.js');
+const autoUpdater = require('./js/utils/autoUpdater.js');
 
 const url = 'https://kour.io';
 const chromiumFlags = [
@@ -11,7 +12,6 @@ const chromiumFlags = [
   ['disable-gpu-vsync'],
   ['use-angle', 'default'],
   ['enable-webgl2-compute-context'],
-  ['disable-accelerated-2d-canvas', 'true'],
   ['in-process-gpu', null, platformType === 'win32'],
   ['autoplay-policy', 'no-user-gesture-required'],
   ['disable-features', 'NetworkService=1'],
@@ -26,6 +26,7 @@ app.whenReady().then(() => {
     }
   });
   gwnd.launchGame(url); 
+  autoUpdater();
 });
 
 
@@ -33,6 +34,3 @@ app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit();
 });
 
-ipcMain.on('cursor-capture-status', (event, isCursorCaptured) => {
-  console.log('Cursor captured:', isCursorCaptured);
-});
