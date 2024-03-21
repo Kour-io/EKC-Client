@@ -4,11 +4,13 @@ const https = require('https');
 const { app } = require('electron');
 const path = require('path');
 
+
 autoUpdater.setFeedURL({
     owner: 'itsNMD404',
     repo: 'EKC-Client',
     provider: 'github',
 });
+autoUpdater.updateConfigPath = path.join(__dirname, '../../../app-update.yml');
 
 const initAutoUpdater = async () => {
     autoUpdater.logger = log;
