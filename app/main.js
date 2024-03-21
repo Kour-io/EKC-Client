@@ -5,7 +5,11 @@ const path = require('path');
 const colors = require('colors');
 const gwnd = require('./js/utils/gameWindow.js');
 const autoUpdater = require('./js/utils/autoUpdater.js');
-
+Object.defineProperty(app, 'isPackaged', {
+  get() {
+    return true;
+  },
+});
 const url = 'https://kour.io';
 const chromiumFlags = [
   ['disable-frame-rate-limit'],
