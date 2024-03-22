@@ -35,20 +35,21 @@ exports.launchGame = (url = null) => {
 };
 
 exports.openCui = () => {
-    const cuiWindow = new this.crossWindow();
-    return cuiWindow;
+    return new exports.crossWindow();
 };
+
 let cuiWindow = null;
 
 const launchCui = () => {
-    if (!cuiWindow) { // Check if the window is not already open
-        cuiWindow = new this.crossWindow();
+    if (cuiWindow && !cuiWindow.win.isDestroyed()) { // Check if the window is already open
+        cuiWindow.focus(); // Bring the existing window to focus
     } 
     else {
-        cuiWindow.focus(); // Bring the existing window to focus
+        cuiWindow = exports.openCui(); // Create a new window if it's not already open
     }
     return cuiWindow;
 };
+
 
 exports.gameWindow = class {
     constructor(url) {
@@ -170,12 +171,21 @@ exports.gameWindow = class {
             });
 
             registerShortcut('F5', () => {
-                // Reload the renderer process
                 const focusedWindow = BrowserWindow.getFocusedWindow();
                 if (focusedWindow) {
                     focusedWindow.webContents.reloadIgnoringCache();
                 }
             });
+
+            registerShortcut('F6', () => {
+                const clipboardText = clipboard.readText();
+                const focusedWindow = BrowserWindow.getFocusedWindow();
+                
+                if (focusedWindow && clipboardText.startsWith('https://kour.io')) {
+                    focusedWindow.loadURL(clipboardText);
+                }
+            });
+            
 
             registerShortcut('Ctrl+Alt+V', () => {
                 launchCui();

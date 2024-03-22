@@ -2,7 +2,6 @@
 const color = require('colors');
 const { ipcRenderer, remote } = require('electron');
 const log = require('electron-logger');
-const autoUpdater = require('../utils/autoUpdater');
 // TOAST notifs
 const Toastify = require('toastify-js');
 
@@ -44,6 +43,5 @@ document.addEventListener('DOMContentLoaded', () => {
         /* Add more styles as needed */
     `;
     document.head.appendChild(style);
-    crossHairHandler();
     
 });

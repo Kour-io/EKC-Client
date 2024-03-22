@@ -31,7 +31,5 @@ function savePrefs() {
     cfg.set('yScale', yScale);
     cfg.set('url', url);
 
-    // Send IPC message to the main process to notify about the save operation
-    ipcRenderer.send('prefsSaved');
     window.close();
 }
