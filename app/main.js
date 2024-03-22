@@ -1,5 +1,6 @@
 const { app, BrowserWindow, globalShortcut, ipcMain } = require('electron');
 const platformType = require('os').platform();
+const log = require('electron-log');
 const fs = require('fs');
 const path = require('path');
 const colors = require('colors');
@@ -10,6 +11,8 @@ Object.defineProperty(app, 'isPackaged', {
     return true;
   },
 });
+
+
 const url = 'https://kour.io';
 const chromiumFlags = [
   ['disable-frame-rate-limit'],
@@ -29,12 +32,14 @@ app.whenReady().then(() => {
       app.commandLine.appendSwitch(flagName, flagValue);
     }
   });
-  gwnd.launchGame(url); 
-  autoUpdater();
+  gwnd.launchGame(url);
+  autoUpdater(); 
 });
-
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit();
 });
 
+ipcMain.on('savePrefs', (event, data) => {
+  log.info(data);
+});

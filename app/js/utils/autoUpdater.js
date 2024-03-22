@@ -1,9 +1,11 @@
 const { autoUpdater } = require('electron-updater');
 const log = require('electron-log');
 const https = require('https');
-const { app } = require('electron');
+const { app, remote, ipcRenderer } = require('electron');
 const path = require('path');
-
+const Toastify = require('toastify-js');
+const Store = require('electron-store');
+const store = new Store();
 
 autoUpdater.setFeedURL({
     owner: 'itsNMD404',
@@ -25,21 +27,20 @@ const initAutoUpdater = async () => {
 
     autoUpdater.on('update-available', (info) => {
         console.log('Update available:', info);
-        // Download and install the update
+        store.set('updateVersion', info.version);
         autoUpdater.downloadUpdate();
     });
 
     autoUpdater.on('update-not-available', () => {
         console.log('No update available');
+        store.set('updateVersion', 'null');
     });
 
     autoUpdater.on('update-downloaded', () => {
         console.log('Update downloaded');
-        // Prompt the user to restart the app to apply the update
-        autoUpdater.quitAndInstall();
+        autoUpdater.quitAndInstall(true, true);
     });
 
-    // Check for updates
     const latestVersion = await getLatestVersionFromGitHub();
     const currentVersion = app.getVersion();
 

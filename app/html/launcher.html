@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EKC</title>
+<style>
+    body {
+        background-color: #333;
+        color: #fff;
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+    .container {
+        width: 80%;
+        margin: 50px auto;
+        text-align: center;
+    }
+    h1 {
+        margin-bottom: 30px;
+    }
+    select {
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        background-color: #666;
+        color: #fff;
+        font-size: 16px;
+        margin-bottom: 20px;
+        margin-right: 10px;
+    }
+    .remove-button {
+        background-color: #8b0000;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+    .remove-button:hover {
+        background-color: #6b0000;
+    }
+    .launch-button {
+        background-color: #333;
+        color: #fff;
+        border: 2px solid #fff;
+        padding: 15px 30px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 18px;
+        margin-bottom: 20px;
+    }
+    .launch-button:hover {
+        background-color: #fff;
+        color: #333;
+    }
+
+    /* Popup box */
+    .popup {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #333;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        z-index: 9999;
+    }
+    .popup-content {
+        text-align: center;
+    }
+    .popup-input {
+        width: calc(100% - 20px);
+        padding: 10px;
+        margin: 10px 0;
+        border: none;
+        border-radius: 5px;
+        background-color: #666;
+        color: #fff;
+        font-size: 16px;
+    }
+    .popup-button {
+        background-color: #8b0000;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+    .popup-button:hover {
+        background-color: #6b0000;
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h1>EKC</h1>
+    <button class="launch-button" onclick="openPopup()">LAUNCH</button><br><br>
+    <select id="accountDropdown" onclick="openPopup()">
+        <option value="">Select Account</option>
+        <option value="account1">Account 1</option>
+        <option value="account2">Account 2</option>
+        <option value="account3">Account 3</option>
+        <option value="account4">Account 4</option>
+        <option value="account5">Account 5</option>
+    </select>
+    <button class="remove-button" onclick="removeAccount()">REMOVE</button>
+</div>
+
+<div id="loginPopup" class="popup">
+    <div class="popup-content">
+        <h2>Login</h2>
+        <input type="text" id="username" class="popup-input" placeholder="Username">
+        <br>
+        <input type="password" id="password" class="popup-input" placeholder="Password">
+        <br>
+        <button class="popup-button" onclick="login()">Login</button>
+    </div>
+</div>
+
+<script>
+    var accountData = {
+        account1: { originalName: "Account 1", username: "" },
+        account2: { originalName: "Account 2", username: "" },
+        account3: { originalName: "Account 3", username: "" },
+        account4: { originalName: "Account 4", username: "" },
+        account5: { originalName: "Account 5", username: "" }
+    };
+
+    function openPopup() {
+        var dropdown = document.getElementById("accountDropdown");
+        var selectedOption = dropdown.options[dropdown.selectedIndex];
+        var optionValue = selectedOption.value;
+        if (optionValue) {
+            var popup = document.getElementById("loginPopup");
+            popup.style.display = "block";
+            document.getElementById("username").value = ""; 
+            document.getElementById("username").placeholder = "Username for " + accountData[optionValue].originalName;
+        }
+    }
+
+    function closePopup() {
+        var popup = document.getElementById("loginPopup");
+        popup.style.display = "none";
+    }
+
+    function removeAccount() {
+    var dropdown = document.getElementById("accountDropdown");
+    var selectedOption = dropdown.options[dropdown.selectedIndex];
+    var optionValue = selectedOption.value;
+    if (optionValue) {
+        selectedOption.text = accountData[optionValue].originalName;
+        accountData[optionValue].username = "";
+    }
+}
+
+function login() {
+    var dropdown = document.getElementById("accountDropdown");
+    var selectedOption = dropdown.options[dropdown.selectedIndex];
+    var optionValue = selectedOption.value;
+    var username = document.getElementById("username").value;
+    var password = document.getElementById("password").value;
+    console.log("Username: " + username + ", Password: " + password);
+    if (optionValue) {
+        accountData[optionValue].username = username;
+        selectedOption.text = username ? username : accountData[optionValue].originalName;
+    }
+    closePopup();
+}
+</script>
+
+</body>
+</html>
