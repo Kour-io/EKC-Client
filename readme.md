@@ -32,4 +32,4 @@ The best way to contact me is to join the discord here I will happily answer any
 [Cipav](https://discord.com/users/1165768182984868003) - some design elements.
 [Zed](https://discord.com/users/740167253491843094) - build scripts / bug fixes
 [PleasingCat](https://discord.com/users/1197234422597025972) - bug fixes
-[Errpr](https://grool.xyz/Error) - Its me!!
+[Error](https://grool.xyz/Error) - Its me!!
