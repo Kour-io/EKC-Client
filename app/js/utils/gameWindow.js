@@ -26,6 +26,7 @@ const store = new Store();
 const userAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:97.0) Gecko/20100101 Firefox/97.0';
 const windows = {
     game: null,
+    launcher: null,
 };
 
 
@@ -36,6 +37,18 @@ exports.launchGame = (url = null) => {
 
 exports.openCui = () => {
     return new exports.crossWindow();
+};
+
+exports.startLauncher = () => {
+    windows.launcher = new this.launcherWindow();
+    return windows.launcher;
+};
+
+exports.closeLauncher = () => {
+    if (windows.launcher && !windows.launcher.win.isDestroyed()) {
+        windows.launcher.win.close();
+        windows.launcher = null; // Reset launcher reference
+    }
 };
 
 let cuiWindow = null;
@@ -230,4 +243,27 @@ exports.crossWindow = class {
             this.win.focus();
         }
     }
+};
+
+exports.launcherWindow = class {
+    constructor() {
+        this.win = new BrowserWindow({
+            width: 1920,
+            height: 1080,
+            titleBarStyle: 'hidden',
+            frame: false,
+            webPreferences: {
+                preload: path.join(__dirname, '../preload/launcher.js'),
+                userAgent: userAgent,
+                contextIsolation: false,
+                nodeIntegration: true,
+            },
+        });
+        this.win.removeMenu();
+        this.win.once('focus', () => this.win.flashFrame(false));
+        this.win.flashFrame(true);
+        this.win.loadFile(path.join(__dirname, '../../html/launcher.html'));
+
+    }
+
 };

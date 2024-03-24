@@ -43,5 +43,6 @@ document.addEventListener('DOMContentLoaded', () => {
         /* Add more styles as needed */
     `;
     document.head.appendChild(style);
+    ipcRenderer.send('testInvoke');
     
 });
