@@ -108,6 +108,7 @@ exports.gameWindow = class {
                 img.id = 'crosshairImage';
                 img.style.top = '50%';
                 img.style.left = '50%';
+                img.style.userSelect = 'none';
                 img.style.transform = 'translate(-50%, -50%)';
                 img.onload = function() {
                     this.width = ${sizeX};
