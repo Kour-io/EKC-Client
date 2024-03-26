@@ -14,6 +14,10 @@ Object.defineProperty(app, 'isPackaged', {
   },
 });
 
+const documentsPath = app.getPath('documents');
+const ekcUtilsFolderPath = path.join(documentsPath, 'EKC-Utils');
+
+fs.mkdirSync(ekcUtilsFolderPath, { recursive: true });
 
 const url = 'https://kour.io';
 const chromiumFlags = [

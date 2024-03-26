@@ -1,5 +1,5 @@
 const { app, BrowserWindow, globalShortcut, clipboard, ipcRenderer } = require('electron');
-const client = new (require('discord-rpc-revamp').Client)();
+const log = require('electron-log');
 const colors = require('colors');
 const platformType = require('os').platform();
 const fs = require('fs');
@@ -114,35 +114,41 @@ exports.gameWindow = class {
         }
 
         const updateCrosshair = () => {
+            log.info('Updating crosshair...');
             const { sizeX, sizeY, url } = loadCrosshairPrefs();
+            log.info('Crosshair preferences:', sizeX, sizeY, url);
             win.webContents.executeJavaScript(`
-            const crosshairImage = document.getElementById('crosshairImage');
-            if (!crosshairImage) {
-                const img = new Image();
-                img.style.position = 'absolute';
-                img.id = 'crosshairImage';
-                img.style.top = '50%';
-                img.style.left = '50%';
-                img.style.userSelect = 'none;
-                img.style.pointerEvents = 'none'
-                img.style.transform = 'translate(-50%, -50%)';
-                img.onload = function() {
-                    this.width = ${sizeX};
-                    this.height = ${sizeY};
-                };
-                img.src = "${url}"; // Set the src attribute to the URL
-                document.body.appendChild(img);
-            } else {
-                crosshairImage.src = "${url}";
-                crosshairImage.onload = function() {
-                    this.width = ${sizeX};
-                    this.height = ${sizeY};
-                };
-            }
-        `);
+                console.log('Executing JavaScript to update crosshair...');
+                const crosshairImage = document.getElementById('crosshairImage');
+                console.log('Crosshair image:', crosshairImage);
+                if (!crosshairImage) {
+                    const img = new Image();
+                    img.style.position = 'absolute';
+                    img.id = 'crosshairImage';
+                    img.style.top = '50%';
+                    img.style.left = '50%';
+                    img.style.userSelect = 'none';
+                    img.style.pointerEvents = 'none';
+                    img.style.transform = 'translate(-50%, -50%)';
+                    img.onload = function() {
+                        this.width = ${sizeX};
+                        this.height = ${sizeY};
+                    };
+                    img.src = "${url}"; // Set the src attribute to the URL
+                    console.log('Appended new crosshair image:', img);
+                    document.body.appendChild(img);
+                } else {
+                    crosshairImage.src = "${url}";
+                    crosshairImage.onload = function() {
+                        this.width = ${sizeX};
+                        this.height = ${sizeY};
+                    };
+                    console.log('Updated existing crosshair image:', crosshairImage);
+                }
+            `);
         };
         
-
+    
         const loadCrosshairPrefs = () => {
             const sizeX = store.get('xScale') || '70';
             const sizeY = store.get('yScale') || '70';
@@ -150,14 +156,10 @@ exports.gameWindow = class {
             return { sizeX, sizeY, url };
         };
 
-        const crosshairHandler = () => {
-            updateCrosshair(); // Load crosshair on start
-        };        
-
-        crosshairHandler();
 
         win.once('ready-to-show', () => {
             console.log('[MAIN]'.bgGreen, 'Web Content Ready To Show'.green);
+            updateCrosshair(); 
 
             if (wombo) { // Check if wombo is defined before using it
                 globalShortcut.register(wombo.wombo, () => {
@@ -186,6 +188,7 @@ exports.gameWindow = class {
 
             registerShortcut('F5', () => {
                 win.loadURL('https://kour.io');
+                
             });
 
             registerShortcut('F6', () => {
@@ -202,7 +205,7 @@ exports.gameWindow = class {
                 launchCui();
             });
 
-            /*registerShortcut('Alt+1', () => {
+            registerShortcut('Alt+1', () => {
                 win.loadURL('https://kour.io/op');
                 
             });
@@ -212,7 +215,7 @@ exports.gameWindow = class {
                     win.loadURL(`https://kour.io/op${i}`);
                     
                 });
-            }*/
+            }
             
         });
 

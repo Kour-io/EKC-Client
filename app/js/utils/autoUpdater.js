@@ -17,7 +17,6 @@ autoUpdater.updateConfigPath = path.join(__dirname, '../../../app-update.yml');
 
 const initAutoUpdater = async () => {
     autoUpdater.logger = log;
-    log.info('gay');
 
     autoUpdater.on('error', (err) => {
         log.info('Error in auto-updater:', err);
@@ -89,7 +88,6 @@ const getLatestVersionFromGitHub = async () => {
             response.on('end', () => {
                 try {
                     const jsonData = JSON.parse(data);
-                    console.log('Received JSON data:', jsonData); // Add this line for debugging
                     resolve(jsonData.tag_name.replace('v', ''));
                 } 
                 catch (error) {
