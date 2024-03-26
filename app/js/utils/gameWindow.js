@@ -5,6 +5,7 @@ const platformType = require('os').platform();
 const fs = require('fs');
 const path = require('path');
 const rpc = require('./rpc.js');
+const Toastify = require('toastify-js');
 const { registerShortcut, unregisterAllShortcuts } = require('./shortcuts.js');
 let wombo = null; // Initialize wombo to null
 try {
@@ -26,6 +27,7 @@ const store = new Store();
 const userAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:97.0) Gecko/20100101 Firefox/97.0';
 const windows = {
     game: null,
+    launcher: null,
 };
 
 
@@ -36,6 +38,18 @@ exports.launchGame = (url = null) => {
 
 exports.openCui = () => {
     return new exports.crossWindow();
+};
+
+exports.startLauncher = () => {
+    windows.launcher = new this.launcherWindow();
+    return windows.launcher;
+};
+
+exports.closeLauncher = () => {
+    if (windows.launcher && !windows.launcher.win.isDestroyed()) {
+        windows.launcher.win.close();
+        windows.launcher = null; // Reset launcher reference
+    }
 };
 
 let cuiWindow = null;
@@ -94,6 +108,7 @@ exports.gameWindow = class {
                 gifImg.style.width = '200px';
                 gifImg.style.height = '200px';
                 gifImg.style.userSelect = 'none';
+                gifImg.style.pointerEvents = 'none';
                 document.body.appendChild(gifImg);
             `);
         }
@@ -108,7 +123,8 @@ exports.gameWindow = class {
                 img.id = 'crosshairImage';
                 img.style.top = '50%';
                 img.style.left = '50%';
-                img.style.userSelect = 'none';
+                img.style.userSelect = 'none;
+                img.style.pointerEvents = 'none'
                 img.style.transform = 'translate(-50%, -50%)';
                 img.onload = function() {
                     this.width = ${sizeX};
@@ -123,10 +139,7 @@ exports.gameWindow = class {
                     this.height = ${sizeY};
                 };
             }
-        `);        
-
-
-            console.log(sizeX, sizeY);
+        `);
         };
         
 
@@ -172,10 +185,7 @@ exports.gameWindow = class {
             });
 
             registerShortcut('F5', () => {
-                const focusedWindow = BrowserWindow.getFocusedWindow();
-                if (focusedWindow) {
-                    focusedWindow.webContents.reloadIgnoringCache();
-                }
+                win.loadURL('https://kour.io');
             });
 
             registerShortcut('F6', () => {
@@ -188,9 +198,22 @@ exports.gameWindow = class {
             });
             
 
-            registerShortcut('Ctrl+Alt+V', () => {
+            registerShortcut('CmdOrCtrl+Alt+V', () => {
                 launchCui();
-            });                 
+            });
+
+            registerShortcut('O+P+1', () => {
+                win.loadURL('https://kour.io/op');
+                
+            });
+
+            for (let i = 2; i <= 9; i++) {
+                registerShortcut(`O+P+${i}`, () => {
+                    win.loadURL(`https://kour.io/op${i}`);
+                    
+                });
+            }
+            
         });
 
         const rpcInstance = new rpc();
@@ -231,4 +254,27 @@ exports.crossWindow = class {
             this.win.focus();
         }
     }
+};
+
+exports.launcherWindow = class {
+    constructor() {
+        this.win = new BrowserWindow({
+            width: 1920,
+            height: 1080,
+            titleBarStyle: 'hidden',
+            frame: false,
+            webPreferences: {
+                preload: path.join(__dirname, '../preload/launcher.js'),
+                userAgent: userAgent,
+                contextIsolation: false,
+                nodeIntegration: true,
+            },
+        });
+        this.win.removeMenu();
+        this.win.once('focus', () => this.win.flashFrame(false));
+        this.win.flashFrame(true);
+        this.win.loadFile(path.join(__dirname, '../../html/launcher.html'));
+
+    }
+
 };

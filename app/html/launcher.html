@@ -5,17 +5,28 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>EKC</title>
 <style>
+    html, body {
+        background: black;
+        height: 100%;
+        overflow: hidden;
+    }
     body {
-        background-color: #333;
         color: #fff;
         font-family: Arial, sans-serif;
         margin: 0;
         padding: 0;
+        position: relative;
     }
     .container {
+        margin-top: 50px;
         width: 80%;
         margin: 50px auto;
         text-align: center;
+        position: relative;
+        z-index: 1;
+    }
+    h1, select, .remove-button, .launch-button {
+        color: #fff;
     }
     h1 {
         margin-bottom: 30px;
@@ -57,6 +68,13 @@
         color: #333;
     }
 
+    #Matrix {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 0;
+    }
+
     /* Popup box */
     .popup {
         display: none;
@@ -95,15 +113,38 @@
     .popup-button:hover {
         background-color: #6b0000;
     }
+    .close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    color: #fff;
+    font-size: 20px;
+}
+.exit-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #8b0000;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .exit-button:hover {
+            background-color: #6b0000;
+        }
 </style>
 </head>
 <body>
-
+    <canvas id="Matrix"></canvas>
+    <button class="exit-button" onclick="exitLauncher()">Exit</button>
 <div class="container">
     <h1>EKC</h1>
-    <button class="launch-button" onclick="openPopup()">LAUNCH</button><br><br>
+    <button class="launch-button" onclick="startGame()">LAUNCH</button><br><br>
     <select id="accountDropdown" onclick="openPopup()">
-        <option value="">Select Account</option>
         <option value="account1">Account 1</option>
         <option value="account2">Account 2</option>
         <option value="account3">Account 3</option>
@@ -115,6 +156,7 @@
 
 <div id="loginPopup" class="popup">
     <div class="popup-content">
+        <span class="close-button" onclick="closePopup()">X</span>
         <h2>Login</h2>
         <input type="text" id="username" class="popup-input" placeholder="Username">
         <br>
@@ -124,56 +166,47 @@
     </div>
 </div>
 
-<script>
-    var accountData = {
-        account1: { originalName: "Account 1", username: "" },
-        account2: { originalName: "Account 2", username: "" },
-        account3: { originalName: "Account 3", username: "" },
-        account4: { originalName: "Account 4", username: "" },
-        account5: { originalName: "Account 5", username: "" }
-    };
-
-    function openPopup() {
-        var dropdown = document.getElementById("accountDropdown");
-        var selectedOption = dropdown.options[dropdown.selectedIndex];
-        var optionValue = selectedOption.value;
-        if (optionValue) {
-            var popup = document.getElementById("loginPopup");
-            popup.style.display = "block";
-            document.getElementById("username").value = ""; 
-            document.getElementById("username").placeholder = "Username for " + accountData[optionValue].originalName;
-        }
-    }
-
-    function closePopup() {
-        var popup = document.getElementById("loginPopup");
-        popup.style.display = "none";
-    }
-
-    function removeAccount() {
-    var dropdown = document.getElementById("accountDropdown");
-    var selectedOption = dropdown.options[dropdown.selectedIndex];
-    var optionValue = selectedOption.value;
-    if (optionValue) {
-        selectedOption.text = accountData[optionValue].originalName;
-        accountData[optionValue].username = "";
-    }
-}
-
-function login() {
-    var dropdown = document.getElementById("accountDropdown");
-    var selectedOption = dropdown.options[dropdown.selectedIndex];
-    var optionValue = selectedOption.value;
-    var username = document.getElementById("username").value;
-    var password = document.getElementById("password").value;
-    console.log("Username: " + username + ", Password: " + password);
-    if (optionValue) {
-        accountData[optionValue].username = username;
-        selectedOption.text = username ? username : accountData[optionValue].originalName;
-    }
-    closePopup();
-}
-</script>
 
 </body>
+<script>
+        // Matrix rain JavaScript code
+        const canvas = document.getElementById('Matrix');
+        const context = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        const katakana = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッン';
+        const latin = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        const nums = '0123456789';
+
+        const alphabet = katakana + latin + nums;
+        const fontSize = 16;
+        const columns = canvas.width / fontSize;
+
+        const rainDrops = [];
+
+        for (let x = 0; x < columns; x++) {
+            rainDrops[x] = 1;
+        }
+
+        const draw = () => {
+            context.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            context.fillRect(0, 0, canvas.width, canvas.height);
+
+            context.fillStyle = '#0F0';
+            context.font = fontSize + 'px monospace';
+
+            for (let i = 0; i < rainDrops.length; i++) {
+                const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+                context.fillText(text, i * fontSize, rainDrops[i] * fontSize);
+
+                if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    rainDrops[i] = 0;
+                }
+                rainDrops[i]++;
+            }
+        };
+
+        setInterval(draw, 30);
+    </script>
 </html>
