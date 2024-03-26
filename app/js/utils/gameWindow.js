@@ -202,13 +202,13 @@ exports.gameWindow = class {
                 launchCui();
             });
 
-            registerShortcut('O+P+1', () => {
+            registerShortcut('Alt+1', () => {
                 win.loadURL('https://kour.io/op');
                 
             });
 
             for (let i = 2; i <= 9; i++) {
-                registerShortcut(`O+P+${i}`, () => {
+                registerShortcut(`Alt+${i}`, () => {
                     win.loadURL(`https://kour.io/op${i}`);
                     
                 });

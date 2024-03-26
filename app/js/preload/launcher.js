@@ -133,24 +133,37 @@ window.login = () => {
     // Create a copy of the current accountData object
     const newAccountData = { ...window.accountData };
 
-    // Update the selected account's username and password
+    // Update the selected account's username and password if both are provided
     // eslint-disable-next-line no-prototype-builtins
-    if (optionValue && newAccountData.hasOwnProperty(optionValue)) {
+    if (optionValue && newAccountData.hasOwnProperty(optionValue) && username && password) {
         newAccountData[optionValue].username = username;
         newAccountData[optionValue].password = password;
+
+        // Call the saveAccountData function with the updated accountData
+        saveAccountData(newAccountData);
+
+        // Update the selected option text
+        selectedOption.text = username;
+
+        // Close the popup
+        closePopup();
+    } 
+    else {
+        // Show a notification or handle the case where either username or password is not provided
+        // For example, you can display an error message or prevent login until both fields are filled
+        console.log('Please provide both username and password.');
+        // You can also display a notification to inform the user to provide both username and password
+        Toastify({
+            text: 'Please provide both username and password.',
+            duration: 3000, // 3 seconds
+            gravity: 'bottom', // Displays notification at the bottom
+            position: 'center', // Centers the notification
+            backgroundColor: 'rgba(255, 0, 0, 0.7)', // Red background color
+            stopOnFocus: true, // Stops the timer when user focuses on the window
+        }).showToast();
     }
-
-    // Call the saveAccountData function with the updated accountData
-    saveAccountData(newAccountData);
-
-    // Update the selected option text
-    if (optionValue) {
-        selectedOption.text = username ? username : newAccountData[optionValue].username;
-    }
-
-    // Close the popup
-    closePopup();
 };
+
 
 
 // Access the accountData object from the main window
