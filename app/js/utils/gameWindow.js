@@ -202,7 +202,7 @@ exports.gameWindow = class {
                 launchCui();
             });
 
-            registerShortcut('Alt+1', () => {
+            /*registerShortcut('Alt+1', () => {
                 win.loadURL('https://kour.io/op');
                 
             });
@@ -212,7 +212,7 @@ exports.gameWindow = class {
                     win.loadURL(`https://kour.io/op${i}`);
                     
                 });
-            }
+            }*/
             
         });
 
