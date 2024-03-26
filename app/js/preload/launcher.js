@@ -38,6 +38,7 @@ const initializeDropdown = () => {
 
 
 document.addEventListener('DOMContentLoaded', () => {
+    updateStatusText();
     initializeDropdown();
     const style = document.createElement('style');
     style.textContent = `
@@ -164,8 +165,6 @@ window.login = () => {
     }
 };
 
-
-
 // Access the accountData object from the main window
 window.accountData = {
     account1: { password: '', username: 'Account 1' },
@@ -215,3 +214,22 @@ store.onDidChange('updateAvailable', (newValue) => {
         isNewVersionToastDisplayed = false;
     }
 });
+
+const updateStatusText = () => {
+    const updateData = store.get('updateData');
+    const updatePercent = updateData.percent;
+    const updateStatusElement = document.getElementById('updateStatus');
+
+    if (updatePercent !== null) {
+        const downloadSpeedMB = updateData.bytesPerSecond / (1024 * 1024);
+        
+        updateStatusElement.textContent = `Update Progress: ${updatePercent.toFixed(2)}%`;
+        updateStatusElement.style.display = 'block'; // Show the element
+    } 
+    else {
+        updateStatusElement.textContent = '';
+        updateStatusElement.style.display = 'none'; // Hide the element
+    }
+};
+
+setInterval(updateStatusText, 1000); 

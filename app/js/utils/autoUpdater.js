@@ -7,7 +7,7 @@ const path = require('path');
 const Toastify = require('toastify-js');
 const Store = require('electron-store');
 const store = new Store();
-
+const fs = require('fs');
 autoUpdater.setFeedURL({
     owner: 'itsNMD404',
     repo: 'EKC-Client',
@@ -17,13 +17,14 @@ autoUpdater.updateConfigPath = path.join(__dirname, '../../../app-update.yml');
 
 const initAutoUpdater = async () => {
     autoUpdater.logger = log;
+    log.info('gay');
 
     autoUpdater.on('error', (err) => {
-        console.error('Error in auto-updater:', err);
+        log.info('Error in auto-updater:', err);
     });
 
     autoUpdater.on('checking-for-update', () => {
-        console.log('Checking for update...');
+        log.info('Checking for update...');
         store.set('updateAvailable', null);
     });
 
@@ -39,18 +40,22 @@ const initAutoUpdater = async () => {
         console.log('No update available');
         store.set('updateVersion', null);
         store.set('updatePercent', null);
+        store.set('updateData', null); // Reset progress
         store.set('updateAvailable', 'no');
     });
 
     autoUpdater.on('update-downloaded', () => {
         console.log('Update downloaded');
         store.set('updatePercent', null); // Reset progress
+        store.set('updateData', null); // Reset progress
         autoUpdater.quitAndInstall(true, true);
     });
 
     autoUpdater.on('download-progress', (progressObj) => {
         const { percent } = progressObj;
+        log.info(percent);
         store.set('updatePercent', percent);
+        store.set('updateData', progressObj);
     });
 
     const latestVersion = await getLatestVersionFromGitHub();
@@ -68,8 +73,9 @@ const initAutoUpdater = async () => {
 const getLatestVersionFromGitHub = async () => {
     const releasesURL = 'https://api.github.com/repos/itsNMD404/EKC-Client/releases/latest';
     const options = {
-    headers: {
-        'User-Agent': 'ekc-client' },
+        headers: {
+            'User-Agent': 'ekc-client',
+        },
     };
 
     return new Promise((resolve, reject) => {
@@ -83,6 +89,7 @@ const getLatestVersionFromGitHub = async () => {
             response.on('end', () => {
                 try {
                     const jsonData = JSON.parse(data);
+                    console.log('Received JSON data:', jsonData); // Add this line for debugging
                     resolve(jsonData.tag_name.replace('v', ''));
                 } 
                 catch (error) {
@@ -94,6 +101,7 @@ const getLatestVersionFromGitHub = async () => {
         });
     });
 };
+
 
 const compareVersions = (versionA, versionB) => {
     const partsA = versionA.split('.');

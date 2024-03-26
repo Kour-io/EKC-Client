@@ -5,7 +5,7 @@ const fs = require('fs');
 const path = require('path');
 const colors = require('colors');
 const gwnd = require('./js/utils/gameWindow.js');
-const autoUpdater = require('./js/utils/autoUpdater.js');
+const initAutoUpdater = require('./js/utils/autoUpdater.js');
 const os = require('os');
 const { eventNames } = require('process');
 Object.defineProperty(app, 'isPackaged', {
@@ -65,8 +65,8 @@ app.whenReady().then(() => {
     }
   });
   gwnd.startLauncher();
-  if (os.platform() === 'win32') {
-    autoUpdater();
+  if (os.platform() != 'darwin') {
+    initAutoUpdater();
 }
 });
 
@@ -86,7 +86,7 @@ ipcMain.handle('exitLauncher', (event, ...args) => {
 ipcMain.handle('startGame', (event, ...args) => {
   gwnd.launchGame(url);
   gwnd.closeLauncher();
-  if (os.platform() === 'win32') {
-    autoUpdater();
+  if (os.platform() != 'darwin') {
+    initAutoUpdater();
 } 
 });
