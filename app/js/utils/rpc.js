@@ -1,23 +1,21 @@
-const client = new (require('discord-rpc-revamp').Client)();
-client.connect({ clientId: '1218201961296564297' }).catch(console.error);
+const { Client } = require('discord-rpc');
+
+const clientId = '1091132902370197614';
+const client = new Client({ transport: 'ipc' });
 
 class rpc {
     constructor() {
-        client.on('ready', _ => {
+        client.on('ready', () => {
+            console.log('Discord RPC connected');
             client.setActivity({
                 details: 'EKC-Client',
-                largeImageKey: 'kour',
+                largeImageKey: 'ekc_outline',
                 startTimestamp: Date.now(),
-            }).then(_ => {
-                console.log('[MAIN]'.bgGreen, 'Discord RPC Set'.blue);
+                buttons: [{ label: 'Join Server', url: 'https://discord.gg/CvvBXY4Y5V' }],
             });
-        
-            client.subscribe('ACTIVITY_JOIN');
-            client.subscribe('ACTIVITY_JOIN_REQUEST');
-        
-            client.on('ACTIVITY_JOIN', data => {});
         });
 
+        client.login({ clientId }).catch(console.error);
     }
 }
 
