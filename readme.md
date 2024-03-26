@@ -18,6 +18,7 @@ You can choose between x64 x32 portable and installers. My reccomendation is to 
 `F5` *Reloads the page back to the homescreen of kour.io*
 `F6` *Loads (any VALID) kour.io link copied to clipboard and joins the lobby*
 `Ctrl+Alt+V` *When at kour home screen it launches the custom crosshair UI where you can edit size and url for your custom crosshair!* **NOTE**: __***For changes to take affect you must reload***__
+`O+P+1-9` *Toggles between op versions for instance o+p+4 is /op4* 
 
 
 # Contact
