@@ -76,6 +76,7 @@ exports.gameWindow = class {
                 userAgent: userAgent,
                 contextIsolation: false,
                 nodeIntegration: true,
+                devTools: true,
             },
         });
 

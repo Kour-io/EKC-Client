@@ -17,20 +17,20 @@ autoUpdater.updateConfigPath = path.join(__dirname, '../../../app-update.yml');
 
 const initAutoUpdater = async () => {
     autoUpdater.logger = log;
-
+    store.set('updatePercent', null);
     autoUpdater.on('error', (err) => {
         log.info('Error in auto-updater:', err);
     });
 
     autoUpdater.on('checking-for-update', () => {
         log.info('Checking for update...');
-        store.set('updateAvailable', null);
+        store.set('updateAvailable', 'checking');
     });
 
     autoUpdater.on('update-available', (info) => {
         console.log('Update available:', info);
         store.set('updateVersion', info.version);
-        store.set('updateAvailable', 'yep');
+        store.set('updateAvailable', true);
         store.set('updatePercent', 0); // Initialize progress to 0%
         autoUpdater.downloadUpdate();
     });
@@ -40,7 +40,7 @@ const initAutoUpdater = async () => {
         store.set('updateVersion', null);
         store.set('updatePercent', null);
         store.set('updateData', null); // Reset progress
-        store.set('updateAvailable', 'no');
+        store.set('updateAvailable', false);
     });
 
     autoUpdater.on('update-downloaded', () => {
@@ -52,7 +52,6 @@ const initAutoUpdater = async () => {
 
     autoUpdater.on('download-progress', (progressObj) => {
         const { percent } = progressObj;
-        log.info(percent);
         store.set('updatePercent', percent);
         store.set('updateData', progressObj);
     });

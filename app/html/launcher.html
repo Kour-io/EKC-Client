@@ -3,8 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech&display=swap" rel="stylesheet">
 <title>EKC</title>
 <style>
+    * {
+        outline: none;
+        user-select: none;
+    }
     html, body {
         background: black;
         height: 100%;
@@ -56,7 +63,7 @@
     .launch-button {
         background-color: #333;
         color: #fff;
-        border: 2px solid #fff;
+        border: 1px solid #fff;
         padding: 15px 30px;
         border-radius: 5px;
         cursor: pointer;
@@ -67,6 +74,16 @@
         background-color: #fff;
         color: #333;
     }
+    .launch-button[disabled] {
+    cursor: not-allowed;
+    background-color: #333;
+    }
+    .launch-button[disabled]:hover {
+        cursor: not-allowed;
+        background-color: #333;
+        color: #fff;
+        border: 1px solid #fff;
+}
 
     #Matrix {
         position: absolute;
@@ -136,6 +153,42 @@
         .exit-button:hover {
             background-color: #6b0000;
         }
+        .share-tech-regular {
+            font-family: "Share Tech", sans-serif;
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        .splash-text {
+            position: absolute;
+            top: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 24px;
+            color: rgb(208, 255, 0);
+            z-index: 5;
+            animation: fade-in 1s ease-in-out forwards;
+            font-family: 'Share Tech', sans-serif;
+        }
+        .splash-background {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.5); /* Adjust opacity as needed */
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+
+        @keyframes fade-in {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
 </style>
 </head>
 <body>
@@ -154,6 +207,12 @@
     <button class="remove-button" onclick="removeAccount()">REMOVE</button>
 </div>
 <div id="updateStatus" style="position: absolute; top: 10px; left: 10px; color: #fff;"></div>
+<!--
+    <div class="container">
+        <div class="splash-background"></div>
+        <div id="splashText" class="splash-text">Welcome to EKC</div>
+    </div>\
+-->
 <div id="loginPopup" class="popup">
     <div class="popup-content">
         <span class="close-button" onclick="closePopup()">X</span>
@@ -175,9 +234,11 @@
 
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
-        const katakana = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッン';
-        const latin = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        const nums = '0123456789';
+        //const katakana = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッン';
+        //const latin = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        const nums = 'EKC';
+        const katakana = 'E'
+        const latin = 'EKC'
 
         const alphabet = katakana + latin + nums;
         const fontSize = 16;
@@ -208,5 +269,23 @@
         };
 
         setInterval(draw, 30);
+
+
+
+        /*const splashPhrases = [
+            "Welcome to EKC",
+            "Explore the adventure",
+            "Join the community",
+            "Get ready to play",
+            // Add more phrases as needed
+        ];
+        const splashTextElement = document.getElementById('splashText');
+        const displayRandomSplash = () => {
+            const randomIndex = Math.floor(Math.random() * splashPhrases.length);
+            splashTextElement.textContent = splashPhrases[randomIndex];
+        };
+        displayRandomSplash();
+        setInterval(displayRandomSplash, 5000);
+        splashTextElement.classList.add('splash-animation');*/
     </script>
 </html>

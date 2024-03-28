@@ -3,6 +3,7 @@ const log = require('electron-log');
 const Store = require('electron-store');
 const store = new Store();
 const Toastify = require('toastify-js');
+const pkg = require('../../../package.json');
 
 const initializeDropdown = () => {
     const dropdown = document.getElementById('accountDropdown');
@@ -38,7 +39,7 @@ const initializeDropdown = () => {
 
 
 document.addEventListener('DOMContentLoaded', () => {
-    updateStatusText();
+    document.querySelector('.launch-button').disabled = true;
     initializeDropdown();
     const style = document.createElement('style');
     style.textContent = `
@@ -134,36 +135,25 @@ window.login = () => {
     // Create a copy of the current accountData object
     const newAccountData = { ...window.accountData };
 
-    // Update the selected account's username and password if both are provided
+    // Update the selected account's username and password
     // eslint-disable-next-line no-prototype-builtins
-    if (optionValue && newAccountData.hasOwnProperty(optionValue) && username && password) {
+    if (optionValue && newAccountData.hasOwnProperty(optionValue)) {
         newAccountData[optionValue].username = username;
         newAccountData[optionValue].password = password;
-
-        // Call the saveAccountData function with the updated accountData
-        saveAccountData(newAccountData);
-
-        // Update the selected option text
-        selectedOption.text = username;
-
-        // Close the popup
-        closePopup();
-    } 
-    else {
-        // Show a notification or handle the case where either username or password is not provided
-        // For example, you can display an error message or prevent login until both fields are filled
-        console.log('Please provide both username and password.');
-        // You can also display a notification to inform the user to provide both username and password
-        Toastify({
-            text: 'Please provide both username and password.',
-            duration: 3000, // 3 seconds
-            gravity: 'bottom', // Displays notification at the bottom
-            position: 'center', // Centers the notification
-            backgroundColor: 'rgba(255, 0, 0, 0.7)', // Red background color
-            stopOnFocus: true, // Stops the timer when user focuses on the window
-        }).showToast();
     }
+
+    // Call the saveAccountData function with the updated accountData
+    saveAccountData(newAccountData);
+
+    // Update the selected option text
+    if (optionValue) {
+        selectedOption.text = username ? username : newAccountData[optionValue].username;
+    }
+
+    // Close the popup
+    closePopup();
 };
+
 
 // Access the accountData object from the main window
 window.accountData = {
@@ -181,22 +171,26 @@ let isNewVersionToastDisplayed = false;
 // Set interval to check for update availability and show toast notification
 setInterval(() => {
     const updateAvailable = store.get('updateAvailable');
-    if (updateAvailable && updateAvailable !== 'upToDate' && !isNewVersionToastDisplayed) {
+    if (updateAvailable !== 'upToDate') { 
+        document.getElementById('updateStatus').innerHTML = `Update percent: ${store.get('updatePercent').toFixed(1)}%`; 
+    } 
+    if (updateAvailable === 'upToDate' && !isNewVersionToastDisplayed) {
         Toastify({
-            text: `New client version available: ${store.get('updateVersion')}, downloading and installing now!`,
-            duration: 10000,
+            text: 'Your client is up-to-date.',
+            duration: 5000,
             gravity: 'top',
             position: 'center',
             style: {
                 background: 'linear-gradient(to right, #00b09b, #96c93d)',
             },
         }).showToast();
+        document.querySelector('.launch-button').disabled = false;
         isNewVersionToastDisplayed = true; // Set flag to true after displaying toast
-    } 
-    else if (updateAvailable === 'upToDate' && !isNewVersionToastDisplayed) { // Add condition to check isNewVersionToastDisplayed
+    }
+    if (updateAvailable && updateAvailable !== 'upToDate' && !isNewVersionToastDisplayed) {
         Toastify({
-            text: 'Your client is up-to-date.',
-            duration: 5000,
+            text: `New client version available: ${store.get('updateVersion')}, downloading...`,
+            duration: 3000,
             gravity: 'top',
             position: 'center',
             style: {
@@ -207,29 +201,8 @@ setInterval(() => {
     }
 }, 1000); // Check every second
 
-
-// Reset the flag when the update becomes up-to-date
 store.onDidChange('updateAvailable', (newValue) => {
     if (newValue === 'upToDate') {
         isNewVersionToastDisplayed = false;
     }
 });
-
-const updateStatusText = () => {
-    const updateData = store.get('updateData');
-    const updatePercent = updateData.percent;
-    const updateStatusElement = document.getElementById('updateStatus');
-
-    if (updatePercent !== null) {
-        const downloadSpeedMB = updateData.bytesPerSecond / (1024 * 1024);
-        
-        updateStatusElement.textContent = `Update Progress: ${updatePercent.toFixed(2)}%`;
-        updateStatusElement.style.display = 'block'; // Show the element
-    } 
-    else {
-        updateStatusElement.textContent = '';
-        updateStatusElement.style.display = 'none'; // Hide the element
-    }
-};
-
-setInterval(updateStatusText, 1000); 
