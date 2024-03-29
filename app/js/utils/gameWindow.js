@@ -96,23 +96,6 @@ exports.gameWindow = class {
         });
         win.setFullScreen(store.get('Fullscreen'));
 
-        if (wombo) {
-            if (clipboard.readText() === wombo.gspinny) { store.set('isgspinny', 'enabled'); }
-        }
-        if (store.get('isgspinny') === 'enabled') {
-            win.webContents.executeJavaScript(`
-                const gifImg = document.createElement('img');
-                gifImg.src = 'https://i.imgur.com/FEc60NL.gif';
-                gifImg.style.position = 'absolute';
-                gifImg.style.bottom = '300px';
-                gifImg.style.right = '10px';
-                gifImg.style.width = '200px';
-                gifImg.style.height = '200px';
-                gifImg.style.userSelect = 'none';
-                gifImg.style.pointerEvents = 'none';
-                document.body.appendChild(gifImg);
-            `);
-        }
 
         const updateCrosshair = () => {
             log.info('Updating crosshair...');
