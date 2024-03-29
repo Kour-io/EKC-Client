@@ -47,7 +47,7 @@ const initAutoUpdater = async () => {
         console.log('Update downloaded');
         store.set('updatePercent', null); // Reset progress
         store.set('updateData', null); // Reset progress
-        autoUpdater.quitAndInstall(true, true);
+        autoUpdater.quitAndInstall(true, false);
     });
 
     autoUpdater.on('download-progress', (progressObj) => {
