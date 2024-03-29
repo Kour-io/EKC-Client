@@ -1,4 +1,6 @@
 const { app, BrowserWindow, globalShortcut, ipcMain } = require('electron');
+const Store = require('electron-store');
+const store = new Store();
 const platformType = require('os').platform();
 const log = require('electron-log');
 const fs = require('fs');
@@ -40,6 +42,7 @@ const chromiumFlags = [
 
 
 app.whenReady().then(() => {
+  store.set('osplatform', os.platform());
   chromiumFlags.forEach(flag => {
     const [flagName, flagValue, condition] = flag;
     if (condition !== false) {
@@ -47,7 +50,7 @@ app.whenReady().then(() => {
     }
   });
   gwnd.startLauncher();
-  if (os.platform() != 'darwin') {
+  if (os.platform() != 'win32') {
     initAutoUpdater();
 }
 });

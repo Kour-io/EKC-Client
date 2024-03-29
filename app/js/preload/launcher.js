@@ -170,6 +170,11 @@ let isNewVersionToastDisplayed = false;
 
 // Set interval to check for update availability and show toast notification
 setInterval(() => {
+    const osplatform = store.get('osplatform');
+    if (osplatform !== 'win32') {
+        document.querySelector('.launch-button').disabled = false;
+        return;
+    }
     const updateAvailable = store.get('updateAvailable');
     if (updateAvailable !== 'upToDate') { 
         document.getElementById('updateStatus').innerHTML = `Update percent: ${store.get('updatePercent').toFixed(1)}%`; 
