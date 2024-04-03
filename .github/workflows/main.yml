@@ -39,17 +39,13 @@ jobs:
           echo "::set-output name=version::$(node -p "require('./package.json').version")"
           echo "::set-output name=name::$(node -p "require('./package.json').name")"
 
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env: 
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create or Get Release ID
+        id: create_or_get_release
+        uses: "marvinpinto/action-automatic-releases@latest"
         with:
-          tag_name: v${{ steps.get_version_name.outputs.version }}
-          release_name: Release ${{ steps.get_version_name.outputs.version }}
-          draft: true
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
           prerelease: false
-          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: "v${{ steps.get_version_name.outputs.version }}"
 
       - name: Build Electron App
         run: npm run dist -- --x64
