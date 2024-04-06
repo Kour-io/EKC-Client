@@ -9,7 +9,7 @@ const Store = require('electron-store');
 const store = new Store();
 const fs = require('fs');
 autoUpdater.setFeedURL({
-    owner: 'itsNMD404',
+    owner: 'Kour-io',
     repo: 'EKC-Client',
     provider: 'github',
 });
@@ -69,7 +69,7 @@ const initAutoUpdater = async () => {
 };
 
 const getLatestVersionFromGitHub = async () => {
-    const releasesURL = 'https://api.github.com/repos/itsNMD404/EKC-Client/releases/latest';
+    const releasesURL = 'https://api.github.com/repos/Kour-io/EKC-Client/releases/latest';
     const options = {
         headers: {
             'User-Agent': 'ekc-client',
