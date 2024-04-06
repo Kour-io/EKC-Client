@@ -1,4 +1,4 @@
-# Welcome to EKC CLient!
+# Welcome to EKC Client!
 Founded 3/19/2024 we aim to provide the most user friendly and simple experience for anyone trying to play kour.io
 
 ## Getting started!
