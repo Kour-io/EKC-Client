@@ -1,10 +1,8 @@
-const { Client } = require('discord-rpc');
-
-const clientId = '1091132902370197614';
-const client = new Client({ transport: 'ipc' });
-
 class rpc {
     constructor() {
+        const { Client } = require('discord-rpc');
+        const client = new Client({ transport: 'ipc' });
+
         client.on('ready', () => {
             console.log('Discord RPC connected');
             client.setActivity({
@@ -15,7 +13,7 @@ class rpc {
             });
         });
 
-        client.login({ clientId }).catch(console.error);
+        client.login({ clientId: '1091132902370197614' }).catch(console.error);
     }
 }
 

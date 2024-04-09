@@ -1,18 +1,11 @@
 const { autoUpdater } = require('electron-updater');
 const log = require('electron-log');
 const https = require('https');
-const { app, remote, ipcRenderer } = require('electron');
-const pkg = require('../../../package.json');
+const { app } = require('electron');
 const path = require('path');
-const Toastify = require('toastify-js');
 const Store = require('electron-store');
 const store = new Store();
-const fs = require('fs');
-autoUpdater.setFeedURL({
-    owner: 'Kour-io',
-    repo: 'EKC-Client',
-    provider: 'github',
-});
+
 autoUpdater.updateConfigPath = path.join(__dirname, '../../../app-update.yml');
 
 const initAutoUpdater = async () => {
