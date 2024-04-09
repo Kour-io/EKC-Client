@@ -1,4 +1,4 @@
-const { app, BrowserWindow, globalShortcut, ipcMain } = require('electron');
+const { app, ipcMain } = require('electron');
 const Store = require('electron-store');
 const store = new Store();
 const platformType = require('os').platform();
@@ -9,12 +9,6 @@ const colors = require('colors');
 const gwnd = require('./js/utils/gameWindow.js');
 const initAutoUpdater = require('./js/utils/autoUpdater.js');
 const os = require('os');
-const { eventNames } = require('process');
-Object.defineProperty(app, 'isPackaged', {
-  get() {
-    return true;
-  },
-});
 
 const documentsPath = app.getPath('documents');
 const ekcUtilsFolderPath = path.join(documentsPath, 'EKC-Utils');
@@ -64,7 +58,7 @@ flags.forEach(flag => {
   if (condition !== false) {
     if (flagValue !== null) {
       app.commandLine.appendSwitch(flagName, flagValue);
-    } 
+    }
     else {
       app.commandLine.appendSwitch(flagName);
     }
@@ -77,22 +71,19 @@ app.whenReady().then(() => {
   gwnd.startLauncher();
   if (os.platform() === 'win32') {
     initAutoUpdater();
-}
+  }
 });
 
 app.on('window-all-closed', () => {
   app.quit();
 });
 
-ipcMain.handle('exitLauncher', (event, ...args) => {
+ipcMain.handle('exitLauncher', () => {
   gwnd.closeLauncher();
   app.quit();
 });
 
-ipcMain.handle('startGame', (event, ...args) => {
+ipcMain.handle('startGame', () => {
   gwnd.launchGame(url);
   gwnd.closeLauncher();
-  if (os.platform() === 'win32') {
-    initAutoUpdater();
-} 
 });

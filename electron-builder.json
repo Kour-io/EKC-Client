@@ -40,6 +40,6 @@
       "provider": "github",
       "owner": "Kour-io",
       "repo": "EKC-Client",
-      "releaseType": "draft",
+      "releaseType": "draft"
     }
   }

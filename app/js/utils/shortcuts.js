@@ -1,5 +1,4 @@
-const { globalShortcut, remote } = require('electron');
-const colors = require('colors');
+const { globalShortcut } = require('electron');
 let shortcuts = {};
 
 const registerShortcut = (key, callback) => {

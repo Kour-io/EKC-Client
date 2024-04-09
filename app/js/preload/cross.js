@@ -1,5 +1,4 @@
 // cross.js
-const { ipcRenderer } = require('electron');
 const Store = require('electron-store');
 const cfg = new Store();
 

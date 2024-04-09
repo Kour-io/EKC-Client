@@ -1,16 +1,14 @@
 const { ipcRenderer } = require('electron');
-const log = require('electron-log');
 const Store = require('electron-store');
 const store = new Store();
 const Toastify = require('toastify-js');
-const pkg = require('../../../package.json');
 
 const initializeDropdown = () => {
     const dropdown = document.getElementById('accountDropdown');
-    
+
     // Clear existing options
     dropdown.innerHTML = '';
-    
+
     // Initialize accountData object with stored data
     window.accountData = store.get('accountData') || {
         account1: { password: '', username: 'Account 1' },
@@ -29,7 +27,7 @@ const initializeDropdown = () => {
         option.value = key;
         option.text = value.username;
         dropdown.appendChild(option);
-        
+
         // Set the selected option if it matches the stored ID
         if (key === selectedOptionId) {
             option.selected = true;
@@ -72,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
         /* Add more styles as needed */
     `;
     document.head.appendChild(style);
-    
+
 });
 
 const saveAccountData = (newAccountData) => {
@@ -102,8 +100,8 @@ window.startGame = () => {
 window.openPopup = () => {
     const popup = document.getElementById('loginPopup');
     popup.style.display = 'block';
-    document.getElementById('username').value = ''; 
-    document.getElementById('password').value = ''; 
+    document.getElementById('username').value = '';
+    document.getElementById('password').value = '';
 };
 
 
@@ -176,9 +174,9 @@ setInterval(() => {
         return;
     }
     const updateAvailable = store.get('updateAvailable');
-    if (updateAvailable !== 'upToDate') { 
-        document.getElementById('updateStatus').innerHTML = `Update percent: ${store.get('updatePercent').toFixed(1)}%`; 
-    } 
+    if (updateAvailable !== 'upToDate') {
+        document.getElementById('updateStatus').innerHTML = `Update percent: ${store.get('updatePercent').toFixed(1)}%`;
+    }
     if (updateAvailable === 'upToDate' && !isNewVersionToastDisplayed) {
         Toastify({
             text: 'Your client is up-to-date.',
